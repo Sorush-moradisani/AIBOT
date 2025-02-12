@@ -1,0 +1,675 @@
+
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aibot Control Panel</title>
+<style>
+@media only screen and (min-width: 850px) {
+	body {
+		 display: flex;
+	}
+	 #content-right {
+		 margin-left: 10px;
+	}  
+}
+body {
+     font-family: Arial, Helvetica, sans-serif;
+     background: #181818;
+     color: #EFEFEF;
+     font-size: 16px;
+}
+ #content-left {
+     max-width: 400px;
+	 flex: 1;
+}
+ #content-right {
+     max-width: 400px;
+	 flex: 1;
+}
+ #stream {
+     width: 100%;
+}
+ #status-display {
+     height: 25px;
+     border: none;
+     padding: 10px;
+     font: 18px/22px sans-serif;
+     margin-bottom: 10px;
+     border-radius: 5px;
+     background: #80FF00;
+     text-align: center;
+}
+ #person {
+     width:100%;
+     height: 25px;
+     border: none;
+     padding: 20px 10px;
+     font: 18px/22px sans-serif;
+     margin-bottom: 10px;
+     border-radius: 5px;
+     resize: none;
+     box-sizing: border-box;
+}
+ button {
+     display: block;
+     margin: 5px 0;
+     padding: 0 12px;
+     border: 0;
+     width: 48%;
+     line-height: 28px;
+     cursor: pointer;
+     color: #fff;
+     background: #626161;
+     border-radius: 5px;
+     font-size: 16px;
+     outline: 0;
+	 float: left;
+}
+ .buttons {
+     height:40px;
+}
+ button:hover {
+     background: #747474;
+}
+ button:active {
+     background: #4F4F4F;
+}
+ button:disabled {
+     cursor: default;
+     background: #393939;
+} 
+.navitem {
+            display: inline-block;
+            width: 70px;
+            height: 50px;
+            text-align: center;
+            border: gray;
+			border-radius: 10px;
+            background-color: #626161;
+            color: #fff;
+			font-size: 14px;
+            cursor: pointer;
+			margin: 4px ;
+} .left {
+     float: left;
+}
+.red {
+     display: inline-block;
+            width: 70px;
+            height: 50px;
+            text-align: center;
+            border: gray;
+			border-radius: 10px;
+            background-color: #C20000;
+            color: #fff;
+			font-size: 14px;
+            cursor: pointer;
+			margin: 4px ;
+}
+.red:hover {
+     background: #F21B1B;
+}
+.red:active {
+     background: #991818;
+}
+ .right {
+     float: right;
+}
+ .image-container {
+     position: relative;
+}
+ .stream {
+     max-width: 400px;
+}
+ ul {
+     list-style: none;
+     padding: 5px;
+     margin:0;
+}
+ li {
+     padding: 5px 0;
+}
+ .delete {
+     background: #ff3034;
+     border-radius: 100px;
+     color: #fff;
+     text-align: center;
+     line-height: 18px;
+     cursor: pointer;
+}
+.slider {
+  -webkit-appearance: none;
+  display: inline-block;
+  width: 100%;
+  height: 15px;
+  border-radius: 5px;  
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #747474;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #747474;
+  cursor: pointer;
+}
+.parent {
+  margin-top: 10px;
+  margin-bottom: 24px;
+  padding: 0px 0px;
+  text-align: left;
+}
+.child {
+  display: inline-block;
+  padding: 0px 0px;
+  vertical-align: middle;
+}
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #80FF00;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: #80FF00;
+  float: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 10px 10px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ACFF91;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #C1FD85;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 0px;
+  text-align: center;
+  border: 6px  #ccc;
+  border-top: none;
+}
+.tabcontent {
+  animation: fadeEffect 0.5s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+ h3 {
+     margin-bottom: 3px;
+}
+ h5 {
+     margin-bottom: 3px;
+	 margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div id="content-left">
+  <div id="stream-container" class="image-container"> <img id="stream" src="http://192.168.133.59:81/stream/"> </div>
+</div>
+<div id="content-right">
+	<div class="tab" style="width:100%">
+		<button class="tablinks" style="color:#0e8927;width:33.33%" onclick="openCity(event, 'camera')" id="defaultOpen">Camera</button>
+		<button class="tablinks" style="color:#0e8927;width:33.33%" onclick="openCity(event, 'controls')">Controls</button>
+		<button class="tablinks" style="color:#0e8927;width:33.33%" onclick="openCity(event, 'sequences')">Sequences</button>
+	</div>
+	<div id="camera" class="tabcontent">
+		<div id="status-display"> <span id="current-status"></span> </div>
+		<div class="buttons">
+			<button id="button-stream" class="left">STREAM CAMERA</button>
+			<button id="button-detect" class="right">DETECT FACES</button>
+		</div>
+		<div class="buttons">
+			<button id="button-capture" class="left" title="Enter a name above before capturing a face">ADD USER</button>
+			<button id="button-recognise" class="right">ACCESS CONTROL</button>
+		</div>
+		<div class='parent' style="width:100%">
+			<div style="width:18%" class='child'>Tilt View</div>
+			<div style="width:80%" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="50" class="slider" id="tilt">
+			</div>
+		</div>
+		<div class='parent' style="width:100%">
+			<div style="width:18%" class='child'>Pan View</div>
+			<div style="width:80%" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="50" class="slider" id="pan">
+			</div>
+		</div>
+
+	</div>
+	
+	<div id="controls" class="tabcontent">
+		<h5 style="color:#80FF00;text-align:left">Right Hand</h4>
+		<div class='parent' style="color:white;" style="width:100%">
+			<div style="width:18%" style="color:white;" class='child'>Left/Right</div>
+			<div style="width:80%" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="0" class="slider" id="lr-rhand">
+			</div>
+		</div>
+		<div class='parent' style="color:white;" style="width:100%">
+			<div style="width:18%" style="color:white;" class='child'>Up/Down</div>
+			<div style="width:80%" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="0" class="slider" id="ud-rhand">
+			</div>
+		</div>
+		<h5 style="color:#80FF00;text-align:left">Left Hand</h4>
+		<div class='parent' style="color:white;" style="width:100%">
+			<div style="width:18%" style="color:white;" class='child'>Left/Right</div>
+			<div style="width:80%" style="color:white;" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="0" class="slider" id="lr-lhand">
+			</div>
+		</div>
+		<div class='parent' style="color:white;" style="width:100%">
+			<div style="width:18%" style="color:white;" class='child'>Up/Down</div>
+			<div style="width:80%" style="color:white;" class='child' class="slidecontainer" >
+				<input type="range" min="1" max="100" value="0" class="slider" id="ud-lhand">
+			</div>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="button-l-rotate"  style="width:31%" class="navitem">Rotate Left</button>
+			<button id="button-stop"  style="width:31%" class="red">Stop</button>
+			<button id="button-r-rotate"  style="width:31%" class="navitem">Rotate Right</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="button-f-left"  style="width:31%" class="navitem">Turn Left</button>
+			<button id="button-f-forward"  style="width:31%" class="navitem">Move Forward</button>
+			<button id="button-f-right"  style="width:31%" class="navitem">Turn Right</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="button-b-left"  style="width:31%" class="navitem">Turn Left</button>
+			<button id="button-b-backward"  style="width:31%" class="navitem">Move Backward</button>
+			<button id="button-b-right"  style="width:31%" class="navitem">Turn Right</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="light"  style="width:31%" class="navitem">Light</button>
+			<button id="fire"  style="width:31%" class="navitem">Fire</button>
+			<button id="ai"  style="width:31%" class="navitem">AI</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="hreset"  style="width:31%" class="navitem">Hard Reset</button>
+			<button id="reset"  style="width:31%" class="navitem">Reset</button>
+			<button id="voicemode"  style="width:31%" class="navitem">Voice Mode</button>
+		</div>
+	</div>
+	
+	<div id="sequences" class="tabcontent">
+		<div class="buttons" style="width:100%">
+			<button id="introduce"  style="width:31%" class="navitem">Introduce</button>
+			<button id="hi-user"  style="width:31%" class="navitem">Greet</button>
+			<button id="find"  style="width:31%" class="navitem">Find</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="follow"  style="width:31%" class="navitem">Follow</button>
+			<button id="dance"  style="width:31%" class="navitem">Dance</button>
+			<button id="random"  style="width:31%" class="navitem">Random</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="history"  style="width:31%" class="navitem">History</button>
+			<button id="hymn"  style="width:31%" class="navitem">Hymn</button>
+			<button id="seq1"  style="width:31%" class="navitem">SEQ1</button>
+		</div>
+		<div class="buttons" style="width:100%">
+			<button id="seq2"  style="width:31%" class="navitem">Ancient Persia</button>
+			<button id="seq3"  style="width:31%" class="navitem">FigurePack</button>
+			<button id="seq4"  style="width:31%" class="navitem">Optimus</button>
+		</div>
+		<button id="stop"  style="width:97%" class="red">Stop</button>
+	</div>
+  
+</div>
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+document.getElementById("defaultOpen").click();
+
+document.addEventListener("DOMContentLoaded", function(event) {
+  var baseHost = document.location.origin;
+  var streamUrl = baseHost + ":81";
+  //const WS_URL = "ws://" + window.location.host + ":9898";
+  //const ws = new WebSocket("ws://192.168.133.59:9898/");
+
+
+
+  // ws.onopen = () => {
+  //   console.log(`Connected to ${WS_URL}`);
+  // };
+  // ws.onmessage = message => {
+  //   if (typeof message.data === "string") {
+  //     if (message.data.substr(0, 8) == "listface") {
+  //       addFaceToScreen(message.data.substr(9));
+  //     } else if (message.data == "delete_faces") {
+  //       deleteAllFacesFromScreen();
+  //     } else {
+  //         document.getElementById("current-status").innerHTML = message.data;
+  //         document.getElementById("status-display").style.background = "green";
+  //     }
+  //   }
+
+  // }
+
+  const view = document.getElementById("stream");
+  const streamButton = document.getElementById("button-stream");
+  const detectButton = document.getElementById("button-detect");
+  const captureButton = document.getElementById("button-capture");
+  const recogniseButton = document.getElementById("button-recognise");
+  
+  var tiltSlider = document.getElementById("tilt");
+  var panSlider = document.getElementById("pan");
+  
+  var lrRhandSlider = document.getElementById("lr-rhand");
+  var udRhandSlider = document.getElementById("ud-rhand");
+  
+  var lrLhandSlider = document.getElementById("lr-lhand");
+  var udLhandSlider = document.getElementById("ud-lhand");
+  
+  const rLeftButton = document.getElementById("button-l-rotate");
+  const StopButton = document.getElementById("button-stop");
+  const rRightButton = document.getElementById("button-r-rotate");
+  
+  const mfLeftButton = document.getElementById("button-f-left");
+  const mfForwardButton = document.getElementById("button-f-forward");
+  const mfRightButton = document.getElementById("button-f-right");
+  
+  const mbLeftButton = document.getElementById("button-b-left");
+  const mbBackwardButton = document.getElementById("button-b-backward");
+  const mbRightButton = document.getElementById("button-b-right");
+  
+  const LightButton = document.getElementById("light");
+  const FireButton = document.getElementById("fire");
+  const AIButton = document.getElementById("ai");
+  
+  const IntroduceButton = document.getElementById("introduce");
+  const GreetButton = document.getElementById("hi-user");
+  const FindButton = document.getElementById("find");
+  
+  const FollowButton = document.getElementById("follow");
+  const DanceButton = document.getElementById("dance");
+  const RandomButton = document.getElementById("random");
+  
+  const HistoryButton = document.getElementById("history");
+  const HymnButton = document.getElementById("hymn");
+  const S1Button = document.getElementById("seq1");
+  
+  const S2Button = document.getElementById("seq2");
+  const S3Button = document.getElementById("seq3");
+  const S4Button = document.getElementById("seq4");
+  
+  const HResetButton = document.getElementById("hreset");
+  const ResetButton = document.getElementById("reset");
+  const VoiceButton = document.getElementById("voicemode");
+  
+  const Stop = document.getElementById("stop");
+  
+  view.src = `${streamUrl}/stream`
+
+  streamButton.onclick = () => {
+	view.src = `${streamUrl}/stream`
+  const query = `http://192.168.133.59/control?var=stream&val=0`
+    fetch(query)
+    //ws.send("stream");
+  };
+  detectButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=detect&val=0`
+    fetch(query)
+    //ws.send("detect");
+  };
+  captureButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=capture&val=0`
+    fetch(query)
+   // ws.send("capture:");
+  };
+  recogniseButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=recognise&val=0`
+    fetch(query)
+    //ws.send("recognise");
+  };
+  
+  tiltSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=tilt&val=${this.value}`
+    fetch(query)
+  //ws.send("tilt:" + this.value);
+  }
+  panSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=pan&val=${this.value}`
+    fetch(query)
+  //ws.send("pan:" + this.value);
+  }
+  lrRhandSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=lr-rhand&val=${this.value}`
+    fetch(query)
+  //ws.send("lr-rhand:" + this.value);
+  }
+  udRhandSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=ud-rhand&val=${this.value}`
+    fetch(query)
+  //ws.send("ud-rhand:" + this.value);
+  }
+  lrLhandSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=lr-lhand&val=${this.value}`
+    fetch(query)
+  //ws.send("lr-lhand:" + this.value);
+  }
+  udLhandSlider.oninput = function() {
+    const query = `http://192.168.133.59/control?var=ud-lhand&val=${this.value}`
+    fetch(query)
+  //ws.send("ud-lhand:" + this.value);
+  }
+  
+
+  rLeftButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=l-rotate&val=0`
+    fetch(query)
+    //ws.send("l-rotate");
+  };
+  StopButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=stop&val=0`
+    fetch(query)
+    //ws.send("stop");
+  };
+  rRightButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=r-rotate&val=0`
+    fetch(query)
+    //ws.send("r-rotate");
+  };
+  
+  mfLeftButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=f-left&val=0`
+    fetch(query)
+    //ws.send("f-left");
+  };
+  mfForwardButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=f-forward&val=0`
+    fetch(query)
+    //ws.send("f-forward");
+  };
+  mfRightButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=f-right&val=0`
+    fetch(query)
+    //ws.send("f-right");
+  };
+  
+  mbLeftButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=b-left&val=0`
+    fetch(query)
+    //ws.send("b-left");
+  };
+  mbBackwardButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=b-backward&val=0`
+    fetch(query)
+    //ws.send("b-backward");
+  };
+  mbRightButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=b-right&val=0`
+    fetch(query)
+    //ws.send("b-right");
+  };
+  
+  LightButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=light&val=0`
+    fetch(query)
+  //ws.send("light");
+  };
+  FireButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=fire&val=0`
+    fetch(query)
+    //ws.send("fire");
+  };
+  AIButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=ai&val=0`
+    fetch(query)
+    //ws.send("ai");
+  };
+  
+  IntroduceButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=introduce&val=0`
+    fetch(query)
+    //ws.send("introduce");
+  };
+  GreetButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=greet&val=0`
+    fetch(query)
+    //ws.send("greet");
+  };
+  FindButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=find&val=0`
+    fetch(query)
+    //ws.send("find");
+  };
+  
+  FollowButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=follow&val=0`
+    fetch(query)
+    //ws.send("follow");
+  };
+  DanceButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=dance&val=0`
+    fetch(query)
+    //ws.send("dance");
+  };
+  RandomButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=random&val=0`
+    fetch(query)
+    //ws.send("random");
+  };
+  
+  HistoryButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=history&val=0`
+    fetch(query)
+    //ws.send("history");
+  };
+  HymnButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=hymn&val=0`
+    fetch(query)
+    //ws.send("hymn");
+  };
+  S1Button.onclick = () => {
+    const query = `http://192.168.133.59/control?var=Scenes&val=0`
+    fetch(query)
+    //ws.send("seq1");
+  };
+  
+  S2Button.onclick = () => {
+    const query = `http://192.168.133.59/control?var=ancient&val=0`
+    fetch(query)
+    //ws.send("seq2");
+  };
+  S3Button.onclick = () => {
+    const query = `http://192.168.133.59/control?var=figure1&val=0`
+    fetch(query)
+    //ws.send("seq3");
+  };
+  S4Button.onclick = () => {
+    const query = `http://192.168.133.59/control?var=optimus&val=0`
+    fetch(query)
+    //ws.send("seq4");
+  };
+
+  HResetButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=hreset&val=0`
+    fetch(query)
+    //ws.send("hreset");
+  };
+  ResetButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=reset&val=0`
+    fetch(query)
+    //ws.send("reset");
+  };
+  VoiceButton.onclick = () => {
+    const query = `http://192.168.133.59/control?var=voicemode&val=0`
+    fetch(query)
+    //ws.send("voicemode");
+  };
+  Stop.onclick = () => {
+    const query = `http://192.168.133.59/control?var=stopseq&val=0`
+    fetch(query)
+    //ws.send("stop");
+  };
+
+
+
+  // function addFaceToScreen(person_name) {
+  //   const faceList = document.querySelector("ul");
+  //   let listItem = document.createElement("li");
+  //   let closeItem = document.createElement("span");
+  //   closeItem.classList.add("delete");
+  //   closeItem.id = person_name;
+  //   closeItem.addEventListener("click", function() {
+  //     ws.send("remove:" + person_name);
+  //   });
+  //   listItem.appendChild(
+  //     document.createElement("strong")
+  //   ).textContent = person_name;
+  //   listItem.appendChild(closeItem).textContent = "X";
+  //   faceList.appendChild(listItem);
+  // }
+
+  //captureButton.disabled = true;
+});
+</script>
+</body>
+</html>
